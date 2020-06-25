@@ -39,13 +39,16 @@ class LoggingHandler extends AbstractProcessingHandler
 			/**
 			 * @var \Exception $exception
 			 */
-			$exception = $context['exception'];
-			$data['context'] = [
-				'file' => $exception->getFile(),
-				'line' => $exception->getLine(),
-				'trace' => $exception->getTraceAsString(),
-				'code' => $exception->getCode(),
-			];
+			if ($exception = Arr::get($context, 'exception')) {
+				$data['context'] = [
+					'file' => $exception->getFile(),
+					'line' => $exception->getLine(),
+					'trace' => $exception->getTraceAsString(),
+					'code' => $exception->getCode(),
+				];
+			} else {
+				$data['context'] = $context;
+			}
 		}
 
 		$entry = $this->logger->entry($data, [
