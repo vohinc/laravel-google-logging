@@ -36,7 +36,16 @@ class LoggingHandler extends AbstractProcessingHandler
 		];
 
 		if ($context = $record['context']) {
-			$data['context'] = $context;
+			/**
+			 * @var \Exception $exception
+			 */
+			$exception = $context['exception'];
+			$data['context'] = [
+				'file' => $exception->getFile(),
+				'line' => $exception->getLine(),
+				'trace' => $exception->getTraceAsString(),
+				'code' => $exception->getCode(),
+			];
 		}
 
 		$entry = $this->logger->entry($data, [
